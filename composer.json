@@ -1,0 +1,42 @@
+{
+    "name": "andreshg112/holidays-php",
+    "description": "This is not mainly intended as a provider of holidays, but a base for you to extend it and crawl pages with the holidays you want.",
+    "keywords": [
+        "andreshg112",
+        "holidays-php"
+    ],
+    "homepage": "https://github.com/andreshg112/holidays-php",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Andrés Herrera García",
+            "email": "andreshg112@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Andreshg112\\HolidaysPhp\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Andreshg112\\HolidaysPhp\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
