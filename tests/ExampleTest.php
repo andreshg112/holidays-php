@@ -12,10 +12,22 @@ class ExampleTest extends TestCase
     {
         $object = new HolidaysPhp;
 
-        $holidays = $object->all();
+        $years = [2018, 2019, 2020, 2021];
+
+        $year = $years[array_rand($years)];
+
+        $holidays = $object->get($year);
+
+        // var_dump($holidays);
 
         $this->assertIsArray($holidays);
 
         $this->assertCount(18, $holidays);
+
+        foreach ($holidays as $holiday) {
+            $this->assertArrayHasKey('date', $holiday);
+            $this->assertArrayHasKey('day', $holiday);
+            $this->assertArrayHasKey('title', $holiday);
+        }
     }
 }

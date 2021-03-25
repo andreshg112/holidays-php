@@ -4,14 +4,17 @@ namespace Andreshg112\HolidaysPhp;
 
 use DOMXPath;
 use DOMDocument;
+use Jenssegers\Date\Date;
 
 class HolidaysPhp
 {
-    public function all(): ?array
+    public function get(int $year = null): ?array
     {
+        $year = $year ?? date('Y');
+
         $dom = new DOMDocument();
 
-        @$dom->loadHTMLFile('https://publicholidays.co/es/2020-dates');
+        @$dom->loadHTMLFile("https://publicholidays.co/es/{$year}-dates");
 
         $finder = new DOMXPath($dom);
 
@@ -51,10 +54,16 @@ class HolidaysPhp
                 continue;
             }
 
+            $spanishDate = trim($tds->item(0)->textContent);
+
+            Date::setLocale('es');
+
+            $date = Date::createFromFormat('j F Y', "{$spanishDate} {$year}");
+
             $holiday = [
-                'date' => trim($tds->item(0)->textContent),
+                'date' => $date->toDateString(),
                 'day' => trim($tds->item(1)->textContent),
-                'name' => trim($tds->item(2)->textContent),
+                'title' => trim($tds->item(2)->textContent),
             ];
 
             $holidays[] = $holiday;
