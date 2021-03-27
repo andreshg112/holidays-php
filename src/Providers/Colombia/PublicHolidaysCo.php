@@ -35,16 +35,20 @@ class PublicHolidaysCo extends BaseProvider
         $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
 
         try {
-            ini_set('user_agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+            $context = stream_context_create(
+                array(
+                    "http" => array(
+                        "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+                    )
+                )
+            );
 
-            $html = file_get_contents($url);
+            $html = file_get_contents($url, false, $context);
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
 
             throw HolidaysPhpException::notFound();
         }
-
-        var_dump($html);
 
         @$dom->loadHTML($html);
 
