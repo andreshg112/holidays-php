@@ -42,6 +42,8 @@ class PublicHolidaysCo extends BaseProvider
 
         $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
 
+        var_dump($nodes);
+
         if ($nodes->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
         }
