@@ -37,6 +37,7 @@ class PublicHolidaysCo extends BaseProvider
         try {
             $html = file_get_contents($url);
         } catch (\Throwable $th) {
+            var_dump($th->getMessage());
             throw HolidaysPhpException::notFound();
         }
 
