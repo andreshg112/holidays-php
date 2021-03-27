@@ -35,6 +35,7 @@ class PublicHolidaysCo extends BaseProvider
         $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
 
         try {
+            ini_set('user_agent', 'Mozilla/4.0 (compatible; MSIE 6.0)');
             $html = file_get_contents($url);
         } catch (\Throwable $th) {
             var_dump($th->getMessage());
