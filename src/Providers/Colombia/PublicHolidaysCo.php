@@ -34,6 +34,8 @@ class PublicHolidaysCo extends BaseProvider
 
         $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
 
+        var_dump($url);
+
         @$dom->loadHTMLFile($url);
 
         $finder = new DOMXPath($dom);
@@ -41,8 +43,6 @@ class PublicHolidaysCo extends BaseProvider
         $classname = "publicholidays";
 
         $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-
-        var_dump($nodes);
 
         if ($nodes->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
