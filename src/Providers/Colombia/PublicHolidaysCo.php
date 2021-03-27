@@ -40,6 +40,8 @@ class PublicHolidaysCo extends BaseProvider
             throw HolidaysPhpException::notFound();
         }
 
+        var_dump($html);
+
         @$dom->loadHTML($html);
 
         $finder = new DOMXPath($dom);
