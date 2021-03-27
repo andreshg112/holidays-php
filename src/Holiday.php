@@ -13,19 +13,19 @@ class Holiday
     public $date;
 
     /** @var string */
-    public $day;
-
-    /** @var string */
     public $title;
 
-    public function __construct(string $country, Date $date, string $day, string $title)
+    /** @var string */
+    public $language;
+
+    public function __construct(string $country, Date $date, string $title, string $language)
     {
         $this->country = $country;
 
         $this->date = $date;
 
-        $this->day = $day;
-
         $this->title = $title;
+
+        $this->language = $language;
     }
 }

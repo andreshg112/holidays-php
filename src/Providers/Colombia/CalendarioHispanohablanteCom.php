@@ -9,17 +9,16 @@ use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
 
-class PublicHolidaysCo extends BaseProvider
+class CalendarioHispanohablanteCom extends BaseProvider
 {
     protected function baseUrl(): string
     {
-        return 'https://publicholidays.co';
+        return 'https://calendariohispanohablante.com';
     }
 
     public function countryTranslations(): array
     {
         return [
-            'en' => 'Colombia',
             'es' => 'Colombia',
         ];
     }
@@ -32,7 +31,7 @@ class PublicHolidaysCo extends BaseProvider
 
         $baseUrl = $this->baseUrl();
 
-        $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
+        $url = "{$baseUrl}/{$year}/calendario-colombia-{$year}.html";
 
         try {
             $html = file_get_contents($url);
@@ -44,7 +43,7 @@ class PublicHolidaysCo extends BaseProvider
 
         $finder = new DOMXPath($dom);
 
-        $classname = "publicholidays";
+        $classname = "group-three";
 
         $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
 
@@ -53,19 +52,11 @@ class PublicHolidaysCo extends BaseProvider
         }
 
         /** @var \DOMElement */
-        $table = $nodes->item(0);
+        $div = $nodes->item(0);
 
-        $tbodyList = $table->getElementsByTagName('tbody');
+        $pList = $div->getElementsByTagName('p');
 
-        if ($tbodyList->count() === 0) {
-            throw HolidaysPhpException::unrecognizedStructure();
-        }
-
-        $tbody = $tbodyList->item(0);
-
-        $trs = $tbody->childNodes;
-
-        if ($trs->count() === 0) {
+        if ($pList->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
         }
 
@@ -73,29 +64,33 @@ class PublicHolidaysCo extends BaseProvider
 
         $country = $this->country();
 
-        for ($i = 0; $i < $trs->count() - 1; $i++) {
-            $tr = $trs->item($i);
+        for ($i = 0; $i < $pList->count(); $i++) {
+            $pItem = $pList->item($i);
 
-            $tds = $tr->childNodes;
+            $pChildren = $pItem->childNodes;
 
-            if ($tds->count() !== 3) {
+            // It must contain 2 nodes, else, it must be something different than a date
+            if ($pChildren->count() !== 2) {
                 continue;
             }
 
-            $spanishDate = trim($tds->item(0)->textContent);
+            // The text is like "Viernes 1 de Enero", so it has to be separated
+            [$day, $spanishDate] = explode(' ', trim($pChildren->item(0)->textContent), 2);
+
+            // The ending : has to be removed
+            $spanishDate = rtrim($spanishDate, ':');
 
             Date::setLocale($this->getLanguage());
 
-            $date = Date::createFromFormat('j F Y', "{$spanishDate} {$year}");
+            // The date looks this way "1 de Enero 2021"
+            $date = Date::createFromFormat('j \d\e F Y', "{$spanishDate} {$year}");
 
-            $holiday = new Holiday(
+            $holidays[] = new Holiday(
                 $country,
                 $date->setTime(0, 0),
-                trim($tds->item(2)->textContent), // title,
+                trim($pChildren->item(1)->textContent), // title
                 $this->getLanguage()
             );
-
-            $holidays[] = $holiday;
         }
 
         return $holidays;

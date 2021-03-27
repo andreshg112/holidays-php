@@ -5,22 +5,22 @@ namespace Andreshg112\HolidaysPhp\Tests;
 use PHPUnit\Framework\TestCase;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
-use Andreshg112\HolidaysPhp\Providers\Colombia\PublicHolidaysCo;
+use Andreshg112\HolidaysPhp\Providers\Colombia\CalendarioHispanohablanteCom;
 
-class PublicHolidaysCoTest extends TestCase
+class CalendarioHispanohablanteComTest extends TestCase
 {
     /** @test */
     public function it_gets_the_holidays()
     {
-        $languages = ['en', 'es'];
+        $language = 'es';
 
-        $language = $languages[array_rand($languages)];
-
-        $provider = new PublicHolidaysCo($language);
+        $provider = new CalendarioHispanohablanteCom($language);
 
         $years = [2018, 2019, 2020, 2021];
 
         $year = $years[array_rand($years)];
+
+        $year = 2021;
 
         $holidays = $provider->holidays($year);
 
@@ -43,7 +43,7 @@ class PublicHolidaysCoTest extends TestCase
     {
         $this->expectException(HolidaysPhpException::class);
 
-        new PublicHolidaysCo('pt');
+        new CalendarioHispanohablanteCom('en');
     }
 
     /** @test */
@@ -51,13 +51,11 @@ class PublicHolidaysCoTest extends TestCase
     {
         $this->expectException(HolidaysPhpException::class);
 
-        $languages = ['en', 'es'];
+        $language = 'es';
 
-        $language = $languages[array_rand($languages)];
+        $provider = new CalendarioHispanohablanteCom($language);
 
-        $provider = new PublicHolidaysCo($language);
-
-        $year = 2017; // This year returns 404 in the web page of the provider
+        $year = 2000; // This year returns 404 in the web page of the provider
 
         $provider->holidays($year);
     }
