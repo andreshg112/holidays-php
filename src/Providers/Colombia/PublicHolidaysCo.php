@@ -34,9 +34,13 @@ class PublicHolidaysCo extends BaseProvider
 
         $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
 
-        var_dump($url);
+        try {
+            $html = file_get_contents($url);
+        } catch (\Throwable $th) {
+            throw HolidaysPhpException::notFound();
+        }
 
-        @$dom->loadHTMLFile($url);
+        @$dom->loadHTML($html);
 
         $finder = new DOMXPath($dom);
 

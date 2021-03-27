@@ -24,8 +24,6 @@ class PublicHolidaysCoTest extends TestCase
 
         $holidays = $provider->holidays($year);
 
-        var_dump($holidays);
-
         $this->assertIsArray($holidays);
 
         $this->assertCount(18, $holidays);
