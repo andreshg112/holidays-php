@@ -1,5 +1,6 @@
 preset: laravel
 
+# Disabled because I could not configure Intelephense to follow these rules
 disabled:
   - concat_without_spaces
   - not_operator_with_successor_space

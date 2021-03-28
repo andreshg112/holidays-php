@@ -2,6 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/andreshg112/holidays-php.svg?style=flat-square)](https://packagist.org/packages/andreshg112/holidays-php)
 [![Build Status](https://img.shields.io/travis/andreshg112/holidays-php/master.svg?style=flat-square)](https://travis-ci.com/andreshg112/holidays-php)
+[![StyleCI](https://github.styleci.io/repos/351239327/shield?branch=master)](https://github.styleci.io/repos/351239327)
 [![Quality Score](https://img.shields.io/scrutinizer/g/andreshg112/holidays-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/andreshg112/holidays-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/andreshg112/holidays-php.svg?style=flat-square)](https://packagist.org/packages/andreshg112/holidays-php)
 
