@@ -20,6 +20,24 @@ class Holiday
 
     public function __construct(string $country, Date $date, string $title, string $language)
     {
+        $country = trim($country);
+
+        if (empty($country)) {
+            throw HolidaysPhpException::notEmptyCountry();
+        }
+
+        $title = trim($title);
+
+        if (empty($title)) {
+            throw HolidaysPhpException::notEmptyTitle();
+        }
+
+        $language = trim($language);
+
+        if (empty($language)) {
+            throw HolidaysPhpException::notEmptyLanguage();
+        }
+
         $this->country = $country;
 
         $this->date = $date;

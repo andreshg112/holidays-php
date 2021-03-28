@@ -8,11 +8,11 @@ use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
 
-class CalendarioHispanohablanteCom extends BaseProvider
+class CalendarioDeColombiaCom extends BaseProvider
 {
     protected function baseUrl(): string
     {
-        return 'https://calendariohispanohablante.com';
+        return 'https://calendariodecolombia.com';
     }
 
     public function countryTranslations(): array
@@ -28,7 +28,7 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
         $baseUrl = $this->baseUrl();
 
-        $url = "{$baseUrl}/{$year}/calendario-colombia-{$year}.html";
+        $url = "{$baseUrl}/calendario-{$year}.html";
 
         try {
             $html = file_get_contents($url);
@@ -38,9 +38,11 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
         $page = new HtmlPage($html);
 
-        $pList = $page->filter('.group-three > p');
+        $rows = $page->filter(
+            '#cuadro_festivos > div > .tabla_festivos1 > .formato_fechas, #cuadro_festivos > div > .tabla_festivos2 > .formato_fechas'
+        );
 
-        if ($pList->count() === 0) {
+        if ($rows->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
         }
 
@@ -49,29 +51,27 @@ class CalendarioHispanohablanteCom extends BaseProvider
         $country = $this->country();
 
         /** @var \DOMElement */
-        foreach ($pList as $pItem) {
-            $pChildren = $pItem->childNodes;
+        foreach ($rows as $row) {
+            $nodeList = $row->childNodes;
 
-            // It must contain 2 nodes, else, it must be something different than a date
-            if ($pChildren->count() !== 2) {
+            // It must contain this amount, else, it must be something different than a holiday
+            if ($nodeList->count() !== 7) {
                 continue;
             }
 
-            // The text is like "Viernes 1 de Enero", so it has to be separated
-            [$day, $spanishDate] = explode(' ', trim($pChildren->item(0)->textContent), 2);
+            /** @var \DOMElement */
+            $timeElement = $nodeList->item(3);
 
-            // The ending : has to be removed
-            $spanishDate = rtrim($spanishDate, ':');
+            // The date is already in a field time
+            $date = Date::parse($timeElement->getAttribute('datetime'));
 
-            Date::setLocale($this->getLanguage());
-
-            // The date looks this way "1 de Enero 2021"
-            $date = Date::createFromFormat('j \d\e F Y', "{$spanishDate} {$year}");
+            /** @var \DOMElement */
+            $aElement = $nodeList->item(2);
 
             $holidays[] = new Holiday(
                 $country,
                 $date->setTime(0, 0),
-                trim($pChildren->item(1)->textContent), // title
+                trim($aElement->getAttribute('title')), // title
                 $this->getLanguage()
             );
         }

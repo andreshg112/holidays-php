@@ -5,16 +5,16 @@ namespace Andreshg112\HolidaysPhp\Tests;
 use PHPUnit\Framework\TestCase;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
-use Andreshg112\HolidaysPhp\Providers\Colombia\CalendarioHispanohablanteCom;
+use Andreshg112\HolidaysPhp\Providers\Colombia\CalendarioDeColombiaCom;
 
-class CalendarioHispanohablanteComTest extends TestCase
+class CalendarioDeColombiaComTest extends TestCase
 {
     /** @test */
     public function it_gets_the_holidays()
     {
         $language = 'es';
 
-        $provider = new CalendarioHispanohablanteCom($language);
+        $provider = new CalendarioDeColombiaCom($language);
 
         $years = [2018, 2019, 2020, 2021];
 
@@ -41,7 +41,7 @@ class CalendarioHispanohablanteComTest extends TestCase
     {
         $this->expectException(HolidaysPhpException::class);
 
-        new CalendarioHispanohablanteCom('en');
+        new CalendarioDeColombiaCom('en');
     }
 
     /** @test */
@@ -51,9 +51,9 @@ class CalendarioHispanohablanteComTest extends TestCase
 
         $language = 'es';
 
-        $provider = new CalendarioHispanohablanteCom($language);
+        $provider = new CalendarioDeColombiaCom($language);
 
-        $year = 2000; // This year returns 404 in the web page of the provider
+        $year = 3000; // This year returns 404 in the web page of the provider
 
         $provider->holidays($year);
     }
