@@ -2,9 +2,8 @@
 
 namespace Andreshg112\HolidaysPhp\Providers\Colombia;
 
-use DOMXPath;
-use DOMDocument;
 use Jenssegers\Date\Date;
+use Wa72\HtmlPageDom\HtmlPage;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
@@ -28,8 +27,6 @@ class PublicHolidaysCo extends BaseProvider
     {
         $year = $year ?? date('Y');
 
-        $dom = new DOMDocument();
-
         $baseUrl = $this->baseUrl();
 
         $url = $this->getLanguage() === 'en' ? "{$baseUrl}/{$year}-dates" : "{$baseUrl}/es/{$year}-dates";
@@ -40,30 +37,10 @@ class PublicHolidaysCo extends BaseProvider
             throw HolidaysPhpException::notFound();
         }
 
-        @$dom->loadHTML($html);
+        // create an object from a fragment of HTML code as you would do with jQuery's $() function
+        $page = new HtmlPage($html);
 
-        $finder = new DOMXPath($dom);
-
-        $classname = "publicholidays";
-
-        $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-
-        if ($nodes->count() === 0) {
-            throw HolidaysPhpException::unrecognizedStructure();
-        }
-
-        /** @var \DOMElement */
-        $table = $nodes->item(0);
-
-        $tbodyList = $table->getElementsByTagName('tbody');
-
-        if ($tbodyList->count() === 0) {
-            throw HolidaysPhpException::unrecognizedStructure();
-        }
-
-        $tbody = $tbodyList->item(0);
-
-        $trs = $tbody->childNodes;
+        $trs = $page->filter('.publicholidays > tbody > tr');
 
         if ($trs->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
@@ -73,9 +50,8 @@ class PublicHolidaysCo extends BaseProvider
 
         $country = $this->country();
 
-        for ($i = 0; $i < $trs->count() - 1; $i++) {
-            $tr = $trs->item($i);
-
+        /** @var \DOMElement */
+        foreach ($trs as $tr) {
             $tds = $tr->childNodes;
 
             if ($tds->count() !== 3) {
