@@ -2,10 +2,10 @@
 
 namespace Andreshg112\HolidaysPhp\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\Colombia\PublicHolidaysCo;
+use PHPUnit\Framework\TestCase;
 
 /** @group forbidden */
 class PublicHolidaysCoTest extends TestCase
