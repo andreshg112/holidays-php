@@ -2,11 +2,11 @@
 
 namespace Andreshg112\HolidaysPhp\Providers\Colombia;
 
-use Jenssegers\Date\Date;
-use Wa72\HtmlPageDom\HtmlPage;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
+use Jenssegers\Date\Date;
+use Wa72\HtmlPageDom\HtmlPage;
 
 class CalendarioHispanohablanteCom extends BaseProvider
 {

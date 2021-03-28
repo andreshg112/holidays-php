@@ -10,9 +10,9 @@ abstract class BaseProvider
 
     public function __construct(string $language)
     {
-        if (!in_array($language, $this->supportedLanguages())) {
+        if (! in_array($language, $this->supportedLanguages())) {
             throw new HolidaysPhpException(
-                "The language code {$language} is not supported by the provider " . static::class
+                "The language code {$language} is not supported by the provider ".static::class
             );
         }
 
