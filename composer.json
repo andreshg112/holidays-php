@@ -19,10 +19,10 @@
         "php": "^7.2",
         "jenssegers/date": "^3.5",
         "wa72/htmlpagedom": "^2.0",
-        "nesbot/carbon": "^1.1|^2.0"
+        "nesbot/carbon": "^1.15|^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.5"
     },
     "autoload": {
         "psr-4": {
