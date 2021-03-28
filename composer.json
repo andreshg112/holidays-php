@@ -3,7 +3,22 @@
     "description": "This is not mainly intended as a provider of holidays, but a base for you to extend it and crawl pages with the holidays you want.",
     "keywords": [
         "andreshg112",
-        "holidays-php"
+        "holidays-php",
+        "holidays",
+        "anniversary",
+        "break",
+        "celebration",
+        "feast",
+        "festival",
+        "festivity",
+        "gala",
+        "layoff",
+        "recess",
+        "vacation",
+        "festivos",
+        "feriados",
+        "vacaciones",
+        "colombia"
     ],
     "homepage": "https://github.com/andreshg112/holidays-php",
     "license": "MIT",
