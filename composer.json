@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "jenssegers/date": "^3.4",
+        "jenssegers/date": "^3.5",
         "wa72/htmlpagedom": "^2.0"
     },
     "require-dev": {
