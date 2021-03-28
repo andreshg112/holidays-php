@@ -7,6 +7,7 @@ use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\Colombia\CalendarioDeColombiaCom;
 use PHPUnit\Framework\TestCase;
 
+/** @group forbidden */
 class CalendarioDeColombiaComTest extends TestCase
 {
     /** @test */
