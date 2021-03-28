@@ -37,7 +37,6 @@ class PublicHolidaysCo extends BaseProvider
             throw HolidaysPhpException::notFound();
         }
 
-        // create an object from a fragment of HTML code as you would do with jQuery's $() function
         $page = new HtmlPage($html);
 
         $trs = $page->filter('.publicholidays > tbody > tr');

@@ -2,9 +2,9 @@
 
 namespace Andreshg112\HolidaysPhp\Providers\Colombia;
 
-use DOMXPath;
 use DOMDocument;
 use Jenssegers\Date\Date;
+use Wa72\HtmlPageDom\HtmlPage;
 use Andreshg112\HolidaysPhp\Holiday;
 use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
@@ -39,22 +39,9 @@ class CalendarioHispanohablanteCom extends BaseProvider
             throw HolidaysPhpException::notFound();
         }
 
-        @$dom->loadHTML($html);
+        $page = new HtmlPage($html);
 
-        $finder = new DOMXPath($dom);
-
-        $classname = "group-three";
-
-        $nodes = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-
-        if ($nodes->count() === 0) {
-            throw HolidaysPhpException::unrecognizedStructure();
-        }
-
-        /** @var \DOMElement */
-        $div = $nodes->item(0);
-
-        $pList = $div->getElementsByTagName('p');
+        $pList = $page->filter('.group-three > p');
 
         if ($pList->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
@@ -64,9 +51,8 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
         $country = $this->country();
 
-        for ($i = 0; $i < $pList->count(); $i++) {
-            $pItem = $pList->item($i);
-
+        /** @var \DOMElement */
+        foreach ($pList as $pItem) {
             $pChildren = $pItem->childNodes;
 
             // It must contain 2 nodes, else, it must be something different than a date
