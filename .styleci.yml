@@ -2,3 +2,4 @@ preset: laravel
 
 disabled:
   - concat_without_spaces
+  - cast_spaces
