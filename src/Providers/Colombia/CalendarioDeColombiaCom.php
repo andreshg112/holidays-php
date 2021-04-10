@@ -7,6 +7,7 @@ use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
 use Jenssegers\Date\Date;
 use Wa72\HtmlPageDom\HtmlPage;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 class CalendarioDeColombiaCom extends BaseProvider
 {
@@ -50,23 +51,20 @@ class CalendarioDeColombiaCom extends BaseProvider
 
         $country = $this->country();
 
-        /** @var \DOMElement */
         foreach ($rows as $row) {
-            $nodeList = $row->childNodes;
+            $crawler = new HtmlPageCrawler($row);
 
-            // It must contain this amount, else, it must be something different than a holiday
-            if ($nodeList->count() !== 7) {
+            $timeElement = $crawler->filter('time')->first();
+
+            // This element must exist
+            if ($timeElement->count() === 0) {
                 continue;
             }
-
-            /** @var \DOMElement */
-            $timeElement = $nodeList->item(3);
 
             // The date is already in a field time
             $date = Date::parse($timeElement->getAttribute('datetime'));
 
-            /** @var \DOMElement */
-            $aElement = $nodeList->item(2);
+            $aElement = $crawler->filter('a')->first();
 
             $holidays[] = new Holiday(
                 $country,
