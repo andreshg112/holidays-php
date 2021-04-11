@@ -65,7 +65,7 @@ class PublicHolidaysCo extends BaseProvider
 
             $holiday = new Holiday(
                 $country,
-                $date->setTime(0, 0),
+                $date,
                 $crawler->children()->getNode(2)->textContent, // title,
                 $this->getLanguage()
             );

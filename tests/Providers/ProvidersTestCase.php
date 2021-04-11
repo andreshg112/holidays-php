@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ProvidersTestCase extends TestCase
 {
+    /** @var string The country of the provider. */
+    protected $country;
+
     /** @var array The supported languages of the provider. */
     protected $languages;
 
@@ -16,6 +19,9 @@ abstract class ProvidersTestCase extends TestCase
 
     /** @var string The fully qualified provider class name to test. */
     protected $provider;
+
+    /** @var array Some holidays that always are on the same day. */
+    protected $someHolidayDates;
 
     /** @var string A language code not supported by the provider. */
     protected $unsupportedLanguage;
@@ -45,9 +51,33 @@ abstract class ProvidersTestCase extends TestCase
         foreach ($holidays as $holiday) {
             $this->assertInstanceOf(Holiday::class, $holiday);
 
+            $this->assertSame($this->country, $holiday->country);
+
             $this->assertSame($year, $holiday->date->year);
 
+            $this->assertNotEmpty($holiday->title);
+
             $this->assertSame($language, $holiday->language);
+        }
+
+        /** @var \Jenssegers\Date\Date */
+        foreach ($this->someHolidayDates as $someHolidayDate) {
+            // Set the tested year so it's the same as the results
+            $someHolidayDate->years($year);
+
+            $contained = false;
+
+            /** @var \Andreshg112\HolidaysPhp\Holiday */
+            foreach ($holidays as $holiday) {
+                // If date is the same, $someHoliday is inside the $holidays
+                if ($someHolidayDate->equalTo($holiday->date)) {
+                    $contained = true;
+
+                    break;
+                }
+            }
+
+            $this->assertTrue($contained, "The holiday {$someHolidayDate->toDateString()} is not contained.");
         }
     }
 

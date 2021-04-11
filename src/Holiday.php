@@ -40,7 +40,7 @@ class Holiday
 
         $this->country = $country;
 
-        $this->date = $date;
+        $this->date = $date->setTime(0, 0);
 
         $this->title = $title;
 

@@ -77,7 +77,7 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
             $holidays[] = new Holiday(
                 $country,
-                $date->setTime(0, 0),
+                $date,
                 $titleContainer->text(),
                 $this->getLanguage()
             );

@@ -68,8 +68,8 @@ class CalendarioDeColombiaCom extends BaseProvider
 
             $holidays[] = new Holiday(
                 $country,
-                $date->setTime(0, 0),
-                $titleContainer->getAttribute('title'), // title
+                $date,
+                $titleContainer->text(),
                 $this->getLanguage()
             );
         }
