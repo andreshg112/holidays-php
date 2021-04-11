@@ -30,4 +30,9 @@ class HolidaysPhpException extends Exception
     {
         return new self('The structure of the web page could not be recognized. Maybe it was updated.');
     }
+
+    public static function unsupportedCountry(): self
+    {
+        return new self('The specified country is not supported.');
+    }
 }
