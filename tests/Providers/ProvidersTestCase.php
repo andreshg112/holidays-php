@@ -8,22 +8,22 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ProvidersTestCase extends TestCase
 {
-    /** @var array $languages The supported languages of the provider. */
+    /** @var array The supported languages of the provider. */
     protected $languages;
 
-    /** @var int $numberOfHolidays The amount of holidays. */
+    /** @var int The amount of holidays. */
     protected $numberOfHolidays;
 
-    /** @var string $provider The fully qualified provider class name to test. */
+    /** @var string The fully qualified provider class name to test. */
     protected $provider;
 
-    /** @var string $unsupportedLanguage A language code not supported by the provider. */
+    /** @var string A language code not supported by the provider. */
     protected $unsupportedLanguage;
 
-    /** @var string $unsupportedYear A year not supported by the provider. It will return a 404 error page. */
+    /** @var string A year not supported by the provider. It will return a 404 error page. */
     protected $unsupportedYear;
 
-    /** @var array $years Some supported years of the provider. */
+    /** @var array Some supported years of the provider. */
     protected $years;
 
     /** @test */
