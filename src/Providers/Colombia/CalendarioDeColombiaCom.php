@@ -23,7 +23,7 @@ class CalendarioDeColombiaCom extends BaseProvider
         ];
     }
 
-    public function holidays(int $year = null): ?array
+    public function holidays(int $year = null): array
     {
         $year = $year ?? date('Y');
 

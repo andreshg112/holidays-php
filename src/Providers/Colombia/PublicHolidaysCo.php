@@ -7,6 +7,7 @@ use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
 use Jenssegers\Date\Date;
 use Wa72\HtmlPageDom\HtmlPage;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 class PublicHolidaysCo extends BaseProvider
 {
@@ -23,7 +24,7 @@ class PublicHolidaysCo extends BaseProvider
         ];
     }
 
-    public function holidays(int $year = null): ?array
+    public function holidays(int $year = null): array
     {
         $year = $year ?? date('Y');
 
@@ -39,9 +40,9 @@ class PublicHolidaysCo extends BaseProvider
 
         $page = new HtmlPage($html);
 
-        $trs = $page->filter('.publicholidays > tbody > tr');
+        $rows = $page->filter('.publicholidays > tbody > tr');
 
-        if ($trs->count() === 0) {
+        if ($rows->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
         }
 
@@ -49,15 +50,14 @@ class PublicHolidaysCo extends BaseProvider
 
         $country = $this->country();
 
-        /** @var \DOMElement */
-        foreach ($trs as $tr) {
-            $tds = $tr->childNodes;
+        foreach ($rows as $row) {
+            $crawler = new HtmlPageCrawler($row);
 
-            if ($tds->count() !== 3) {
+            if ($crawler->children()->count() !== 3) {
                 continue;
             }
 
-            $spanishDate = trim($tds->item(0)->textContent);
+            $spanishDate = trim($crawler->children()->getNode(0)->textContent);
 
             Date::setLocale($this->getLanguage());
 
@@ -66,7 +66,7 @@ class PublicHolidaysCo extends BaseProvider
             $holiday = new Holiday(
                 $country,
                 $date->setTime(0, 0),
-                trim($tds->item(2)->textContent), // title,
+                $crawler->children()->getNode(2)->textContent, // title,
                 $this->getLanguage()
             );
 

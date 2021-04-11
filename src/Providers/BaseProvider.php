@@ -54,9 +54,10 @@ abstract class BaseProvider
      * Returns a list of holidays based on the year and language specified in the constructor.
      *
      * @param int $year Must be supported by the provider. By default, the current year.
-     * @return array|null
+     * @return array
+     * @throws \Andreshg112\HolidaysPhp\HolidaysPhpException
      */
-    abstract public function holidays(int $year = null): ?array;
+    abstract public function holidays(int $year = null): array;
 
     /**
      * Returns a list of the languages supported by the provider specified in `countryTranslations()`.
