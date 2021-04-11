@@ -7,6 +7,7 @@ use Andreshg112\HolidaysPhp\HolidaysPhpException;
 use Andreshg112\HolidaysPhp\Providers\BaseProvider;
 use Jenssegers\Date\Date;
 use Wa72\HtmlPageDom\HtmlPage;
+use Wa72\HtmlPageDom\HtmlPageCrawler;
 
 class CalendarioHispanohablanteCom extends BaseProvider
 {
@@ -38,9 +39,9 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
         $page = new HtmlPage($html);
 
-        $pList = $page->filter('.group-three > p');
+        $rows = $page->filter('.group-three > p');
 
-        if ($pList->count() === 0) {
+        if ($rows->count() === 0) {
             throw HolidaysPhpException::unrecognizedStructure();
         }
 
@@ -48,17 +49,18 @@ class CalendarioHispanohablanteCom extends BaseProvider
 
         $country = $this->country();
 
-        /** @var \DOMElement */
-        foreach ($pList as $pItem) {
-            $pChildren = $pItem->childNodes;
+        foreach ($rows as $row) {
+            $crawler = new HtmlPageCrawler($row);
 
-            // It must contain 2 nodes, else, it must be something different than a date
-            if ($pChildren->count() !== 2) {
+            $dateContainer = $crawler->filter('b')->first();
+
+            // This element must exist
+            if ($dateContainer->count() === 0) {
                 continue;
             }
 
             // The text is like "Viernes 1 de Enero", so it has to be separated
-            [$day, $spanishDate] = explode(' ', trim($pChildren->item(0)->textContent), 2);
+            [, $spanishDate] = explode(' ', $dateContainer->text(), 2);
 
             // The ending : has to be removed
             $spanishDate = rtrim($spanishDate, ':');
@@ -68,10 +70,15 @@ class CalendarioHispanohablanteCom extends BaseProvider
             // The date looks this way "1 de Enero 2021"
             $date = Date::createFromFormat('j \d\e F Y', "{$spanishDate} {$year}");
 
+            // Remove it so the text inside the $crawler is only the title of the holiday
+            $dateContainer->remove();
+
+            $titleContainer = $crawler->first();
+
             $holidays[] = new Holiday(
                 $country,
                 $date->setTime(0, 0),
-                trim($pChildren->item(1)->textContent), // title
+                $titleContainer->text(),
                 $this->getLanguage()
             );
         }

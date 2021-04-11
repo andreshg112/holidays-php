@@ -54,22 +54,22 @@ class CalendarioDeColombiaCom extends BaseProvider
         foreach ($rows as $row) {
             $crawler = new HtmlPageCrawler($row);
 
-            $timeElement = $crawler->filter('time')->first();
+            $dateContainer = $crawler->filter('time')->first();
 
             // This element must exist
-            if ($timeElement->count() === 0) {
+            if ($dateContainer->count() === 0) {
                 continue;
             }
 
             // The date is already in a field time
-            $date = Date::parse($timeElement->getAttribute('datetime'));
+            $date = Date::parse($dateContainer->getAttribute('datetime'));
 
-            $aElement = $crawler->filter('a')->first();
+            $titleContainer = $crawler->filter('a')->first();
 
             $holidays[] = new Holiday(
                 $country,
                 $date->setTime(0, 0),
-                trim($aElement->getAttribute('title')), // title
+                $titleContainer->getAttribute('title'), // title
                 $this->getLanguage()
             );
         }
