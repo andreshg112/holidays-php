@@ -63,14 +63,14 @@ abstract class ProvidersTestCase extends TestCase
         /** @var \Jenssegers\Date\Date */
         foreach ($this->someHolidayDates as $someHolidayDate) {
             // Set the tested year so it's the same as the results
-            $someHolidayDate->years($year);
+            $someHolidayDate->year($year);
 
             $contained = false;
 
             /** @var \Andreshg112\HolidaysPhp\Holiday */
             foreach ($holidays as $holiday) {
                 // If date is the same, $someHoliday is inside the $holidays
-                if ($someHolidayDate->equalTo($holiday->date)) {
+                if ($someHolidayDate->eq($holiday->date)) {
                     $contained = true;
 
                     break;
