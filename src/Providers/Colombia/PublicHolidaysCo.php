@@ -63,6 +63,10 @@ class PublicHolidaysCo extends BaseProvider
 
             $date = Date::createFromFormat('j F Y', "{$spanishDate} {$year}");
 
+            if (!$date) {
+                throw HolidaysPhpException::unrecognizedDate();
+            }
+
             $holiday = new Holiday(
                 $country,
                 $date,

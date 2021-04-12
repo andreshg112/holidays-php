@@ -70,6 +70,10 @@ class CalendarioHispanohablanteCom extends BaseProvider
             // The date looks this way "1 de Enero 2021"
             $date = Date::createFromFormat('j \d\e F Y', "{$spanishDate} {$year}");
 
+            if (!$date) {
+                throw HolidaysPhpException::unrecognizedDate();
+            }
+
             // Remove it so the text inside the $crawler is only the title of the holiday
             $dateContainer->remove();
 

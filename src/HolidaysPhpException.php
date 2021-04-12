@@ -26,6 +26,11 @@ class HolidaysPhpException extends Exception
         return new self('The requested web page could not be found.');
     }
 
+    public static function unrecognizedDate(): self
+    {
+        return new self('The date of a holiday could not be recognized. Maybe the structure was updated.');
+    }
+
     public static function unrecognizedStructure(): self
     {
         return new self('The structure of the web page could not be recognized. Maybe it was updated.');
